@@ -38,10 +38,10 @@
                 height:100%;
             }
 
-            #word {
+            #word, #keyboard {
                 color: #AAA;
                 position: absolute;
-                top: 50%;
+                top: 200px;
                 margin-top: -64px;
                 height:128px;
                 font-size: 128px;
@@ -53,11 +53,15 @@
                 word-wrap: break-word;
             	text-shadow: 0px 2px 3px #000;
             }
-            
+
+            #keyboard  {top: 400px}
+            #keyboard img {max-width: 900px; border-radius: 10px}
+
             .keys-hit {
-                color: #CCC;
+                /* color: #CCC;
                 font-size: 128px;
-            	text-shadow: none;
+            	text-shadow: none; */
+                display: none
             }
             
             #next-level {
@@ -114,10 +118,11 @@
             }
             
             .goodChar {
-                color: #AAAAAA;
+                color: #5bf24a;
             	text-shadow: 0px 1px 1px #FFF, 0px 2px 2px #FFF;
             }
-            
+            .audio-toggle {position: absolute;top: 20px;right: 40px;width: 60px;cursor: pointer;}
+            .hidden {display: none}
         </style>
 
     </head>
@@ -129,6 +134,16 @@
             <div id='layout'>
             </div>
 
+            <div id='audios'>
+                <i class="audio-toggle on">🔊On</i>
+                <i class="audio-toggle off hidden">🔇Off</i>
+                <div class="hidden audios">
+                    <audio class="clack" src="clack.wav"></audio>
+                    <audio class="click" src="click.wav"></audio>
+                    <audio class="ding" src="ding.wav"></audio>
+                </div>
+            </div>
+
             <div id='level-chars'>
             </div>
 
@@ -136,6 +151,10 @@
             </div>
 
             <div id='word'>
+            </div> 
+            
+            <div id='keyboard'>
+                <img src="keyboard.png" alt="">
             </div>
             
             <div id='rigor'>
@@ -145,7 +164,16 @@
             </div>
 
         </div>        
-
+        <script>
+        function toggleAudio() {
+            $('.audio-toggle').toggleClass('hidden');
+            var muted = ($('.audio-toggle.on.hidden').length>0);
+            $('audio').each(function (i,e) {
+                e.muted = muted;              
+            });
+        }
+        $('.audio-toggle').click(toggleAudio);
+        </script>
     </body>
     
 </html>
