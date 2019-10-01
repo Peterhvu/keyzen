@@ -13,9 +13,10 @@ layouts={};
 layouts["qwerty"] = " jfkdlsahgyturieowpqbnvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
 layouts["azerty"] = " jfkdlsmqhgyturieozpabnvcxw6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
 layouts["colemak"] = " ntesiroahdjglpufywqbkvmcxz1234567890'\",.!?:;/@$%&#*()_ABCDEFGHIJKLMNOPQRSTUVWXYZ~+-={}|^<>`[]\\";
-layouts["b�po"] = " tesirunamc,�vodpl�jbk'.qxghyf�zw6758493021`-=[]\\;/ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
+layouts["bépo"] = " tesirunamc,èvodpléjbk'.qxghyfàzw6758493021`-=[]\\;/ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
 layouts["norman"] = " ntieosaygjkufrdlw;qbpvmcxz1234567890'\",.!?:;/@$%&#*()_ABCDEFGHIJKLMNOPQRSTUVWXYZ~+-={}|^<>`[]\\";
 layouts["code-es6"] = " {}',;():.>=</_-|`!?#[]\\+\"@$%&*~^";
+layouts["custom"] = " jfkdlsahgyturieowpqbnvmcxzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 $(document).ready(function() {
     if (localStorage.data != undefined) {
@@ -63,8 +64,9 @@ function set_level(l) {
 }
 
 function set_layout(l) {
-    data.current_layout = l
-	data.chars = layouts[l]
+    (l == 'custom')? custom_layout_selected() : $('#custom').hide();
+    data.current_layout = l;
+    data.chars = layouts[l];
     data.in_a_row = {};
     for(var i = 0; i < data.chars.length; i++) {
         data.in_a_row[data.chars[i]] = data.consecutive;
@@ -77,8 +79,15 @@ function set_layout(l) {
     render();
 }
 
+function custom_layout_selected() {
+    $('#custom').show();
+    set_level(50);
+    data.consecutive = 1;
+}
 
 function keyHandler(e) {
+    if (e.target.tagName == "INPUT") return;
+
     start_stats();
 
     var key = String.fromCharCode(e.which);
@@ -284,18 +293,31 @@ function render_word() {
 
 function generate_word() {
     word = '';
-    for(var i = 0; i < data.word_length; i++) {
-        c = choose(get_training_chars());
-        if(c != undefined && c != word[word.length-1]) {
-            word += c;
-        }
-        else {
-            word += choose(get_level_chars());
+    if (data.current_layout == 'custom') word = get_next_custom_word();
+    else {
+        for (var i = 0; i < data.word_length; i++) {
+            c = choose(get_training_chars());
+            if (c != undefined && c != word[word.length - 1]) {
+                word += c;
+            }
+            else {
+                word += choose(get_level_chars());
+            }
         }
     }
     return word;
 }
 
+function get_next_custom_word() {
+    var customWords = $('#custom-words').val(),
+        nextWord = customWords.split(' ').reverse().pop(),
+        newCustomWords = 'Please enter more words to train'
+
+    if (nextWord) newCustomWords = customWords.replace(nextWord, '').trim();
+    else nextWord = 'Word needed';
+    $('#custom-words').val(newCustomWords);
+    return nextWord;
+}
 
 function get_level_chars() {
     return data.chars.slice(0, data.level + 1).split('');

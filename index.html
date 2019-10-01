@@ -4,7 +4,7 @@
 <html>
 
     <head>
-        <title>keyzen</title>
+        <title>Typing</title>
         <script src="jquery.js"></script>
         <script src="keyzen.js"></script>
 		<meta charset="UTF-8">
@@ -123,6 +123,7 @@
             }
             .audio-toggle {position: absolute;top: 20px;right: 40px;width: 60px;cursor: pointer;}
             .hidden {display: none}
+            #custom-words {width: 80%; margin: 10px 10%}
         </style>
 
     </head>
@@ -148,6 +149,10 @@
             </div>
 
             <div id='next-level'>
+            </div>
+
+            <div id='custom' style="display: none">
+                <input id="custom-words" type="text" placeholder="enter words to train">
             </div>
 
             <div id='word'>
