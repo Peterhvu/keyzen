@@ -81,7 +81,7 @@ function set_layout(l) {
 
 function custom_layout_selected() {
     $('#custom').show();
-    set_level(50);
+    set_level(53);
     data.consecutive = 1;
 }
 
